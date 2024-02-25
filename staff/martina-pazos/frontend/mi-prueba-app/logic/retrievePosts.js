@@ -7,7 +7,7 @@ function retrievePosts(email) {
     })
     //sino encuentro el usuario
     if (foundUser === undefined)
-        throw new Error("User no found")
+        throw new Error("User not found")
 
     return posts
 

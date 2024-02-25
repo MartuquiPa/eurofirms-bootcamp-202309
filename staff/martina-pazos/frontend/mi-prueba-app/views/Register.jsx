@@ -1,4 +1,5 @@
 function Register(props) {
+    console.log("Register")
     function handleRegisterSubmit(event) {
         event.preventDefault()
         const nameInput = event.target.querySelector("#name-input")

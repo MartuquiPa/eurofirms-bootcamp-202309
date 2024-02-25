@@ -1,9 +1,13 @@
 function Home(props) {
+    console.log("Home")
 
     const viewState = React.useState(null)
     const view = viewState[0]
     const setView = viewState[1]
 
+    const timestampState = React.useState(null)
+    //const timestamp = timestampState[0]
+    const setTimestamp = timestampState[1]
 
     let name = null
 
@@ -15,8 +19,6 @@ function Home(props) {
     } catch (error) {
         alert(error.message)
     }
-
-
 
     let posts = null
 
@@ -39,6 +41,37 @@ function Home(props) {
     function handleNewPostCancelClick() {
         setView(null)
     }
+
+    function handleNewPostSubmit(event) {
+        event.preventDefault()
+
+        const imageInput = event.target.querySelector("#image-input")
+        const imageDescriptionInput = event.target.querySelector("#image-description-input")
+        const textInput = event.target.querySelector("#text-input")
+
+        const image = imageInput.value
+        const imageDescription = imageDescriptionInput.value
+        const text = textInput.value
+
+        try {
+            createNewPost(loggeInEmail, image, imageDescription, text)
+            setView(null)
+
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    function handlePostLikeClick(postId) {
+        try {
+            toggleLikePost(loggeInEmail, postId)
+
+            setTimestamp(Date.now())
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
     return <div>
         <header className="header" aria-label="Header">
             <h1>Home</h1>
@@ -47,18 +80,18 @@ function Home(props) {
             <button className="button" onClick={handleLogoutClick}>Logout</button>
         </header>
 
-        {view === "new-post" ? <div id="new-post-panel" className="view">
+        {view === "new-post" ? <div className="view">
             <h2>New post</h2>
 
-            <form id="new-post-form" className="form">
+            <form className="form" onSubmit={handleNewPostSubmit}>
                 <label htmlFor="image-input" className="label">Image</label>
-                <input type="url" id="image-input" className="input" required></input>
+                <input type="url" id="image-input" className="input" required />
 
                 <label htmlFor="image-description-input" className="label">Image description</label>
-                <input type="text" id="image-description-input" className="input" required></input>
+                <input type="text" id="image-description-input" className="input" required />
 
                 <label htmlFor="text-input" className="label">Text</label>
-                <input type="text" id="text-input" className="input" required></input>
+                <input type="text" id="text-input" className="input" required />
 
                 <button type="submit" className="button">Post</button>
                 <button onClick={handleNewPostCancelClick} className="button">Cancel</button>
@@ -66,17 +99,22 @@ function Home(props) {
         </div> : null}
 
         {posts !== null ? <div aria-label="Posts list" className="view">
-            {posts.map(function (post, index) {
+            {posts.toReversed().map(function (post) {
                 const liked = post.likes.includes(loggeInEmail)
 
-                return <article key={index} className="post">
+                function handleBeforePostLikeClick() {
+                    handlePostLikeClick(post.id)
+
+                }
+
+                return <article key={post.id} className="post">
                     <h3>{post.author}</h3>
                     <img className="post-image"
                         src={post.image}
                         alt={post.imageDescription}
                         title={post.imageDescription} />
                     <p>{post.text}</p>
-                    <button>{(liked ? '❤️' : '🩶') + ' ' + post.likes.length + ' likes'}</button>
+                    <button className="button" onClick={handleBeforePostLikeClick}>{(liked ? '❤️' : '🩶') + ' ' + post.likes.length + ' likes'}</button>
                 </article>
             })}
         </div> : null}

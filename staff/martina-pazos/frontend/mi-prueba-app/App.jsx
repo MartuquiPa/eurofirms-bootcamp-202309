@@ -1,4 +1,5 @@
 function App() {
+    console.log("App")
     //viewState, es el estado de lo que se ve 
     const viewState = React.useState('login')
     //siempre que se use viewState se esta usando una array. Este es el estado actual.

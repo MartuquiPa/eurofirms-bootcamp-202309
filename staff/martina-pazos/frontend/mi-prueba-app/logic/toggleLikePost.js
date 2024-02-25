@@ -1,21 +1,21 @@
-function toggleLikePost(email, postIndex) {
+function toggleLikePost(email, postId) {
     validateEmail(email)
-    validateNumber(postIndex, "post Index")
+    validateText(postId, "post id")
 
     var foundUser = find(users, function (user) {
         return user.email === email
     })
     if (foundUser === undefined)
-        throw new Error("Wrong credentials")
+        throw new Error("User not found")
 
-    //voy a comprobar si el post al q se le quiere dar a me gusta, esta en la base de datso
-    if (postIndex >= posts.length)
-        throw new RangeError("Post index out of range")
+    var post = find(posts, function (post) {
+        return post.id === postId
+    })
 
-    var post = posts[postIndex]
+    if (post === undefined)
+        throw new Error("Post not found")
 
 
-    //es para que solo puede dar a me gusta los email de la base de datos
     var emailIndex = post.likes.indexOf(email)
 
     if (emailIndex < 0)
