@@ -1,16 +1,11 @@
-//lo que hacemos aqui es llamar al usuarios por el email y el nombre de usuario
-function retrieveUser(email) {
+function retrieveUser(userId) {
 
-    validateEmail(email)
+    validateText(userId, "user id")
 
-    var foundUser = find(users, function (user) {
-        return user.email === email
-    })
+    const user = db.findUserById(userId)
 
+    if (!user)
+        throw new Error("User not found")
 
-    if (foundUser === undefined)
-        //esta es la manera de lanzar un error en javaScrit
-        throw new Error("Wrong credentials")
-    // si lo en encontrafo lo devuelvo
-    return foundUser
+    return user
 }

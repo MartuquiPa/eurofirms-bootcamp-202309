@@ -1,14 +1,25 @@
-function retrievePosts(email) {
-    validateEmail(email)
+function retrievePosts(userId) {
+    validateText(userId, "user id")
 
-    //ahora viene la lógica, ¿tú existes en esta app?
-    var foundUser = find(users, function (user) {
-        return user.email === email
-    })
-    //sino encuentro el usuario
-    if (foundUser === undefined)
+    const user = db.findUserById(userId)
+
+    if (!user)
         throw new Error("User not found")
 
-    return posts
+    const posts = db.getPosts().reverse()
 
+    posts.forEach(function (post) {
+        const user = db.findUserById(post.author)
+
+        post.author = {
+            id: user.id,
+            name: user.name
+        }
+
+        post.liked = post.likes.includes(userId)
+
+        post.saved = user.includes(post.id)
+    })
+
+    return posts
 }

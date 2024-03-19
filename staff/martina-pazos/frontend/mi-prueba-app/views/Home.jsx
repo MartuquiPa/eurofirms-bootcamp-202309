@@ -12,7 +12,7 @@ function Home(props) {
     let name = null
 
     try {
-        const user = retrieveUser(loggeInEmail)
+        const user = retrieveUser(sessionUserId)
 
         name = user.name
 
@@ -23,13 +23,13 @@ function Home(props) {
     let posts = null
 
     try {
-        posts = retrievePosts(loggeInEmail)
+        posts = retrievePosts(sessionUserId)
     } catch (error) {
         alert(error.message)
     }
 
     function handleLogoutClick() {
-        loggeInEmail = null
+        sessionUserId = null
 
         props.onLogout()
     }
@@ -54,7 +54,8 @@ function Home(props) {
         const text = textInput.value
 
         try {
-            createNewPost(loggeInEmail, image, imageDescription, text)
+            createNewPost(sessionUserId, image, imageDescription, text)
+
             setView(null)
 
         } catch (error) {
@@ -64,11 +65,28 @@ function Home(props) {
 
     function handlePostLikeClick(postId) {
         try {
-            toggleLikePost(loggeInEmail, postId)
+            toggleLikePost(sessionUserId, postId)
 
             setTimestamp(Date.now())
         } catch (error) {
             alert(error.message)
+        }
+    }
+
+    function handlePostDeleteClick(postId) {
+        try {
+            deletePost(sessionUserId, userId)
+
+            setTimestamp(Date.now())
+        } catch (error) {
+            alert(error.message)
+        }
+
+    }
+
+    function handleBeforePostDelete() {
+        handlePostDeleteClick(post.id) {
+
         }
     }
 
@@ -108,13 +126,18 @@ function Home(props) {
                 }
 
                 return <article key={post.id} className="post">
-                    <h3>{post.author}</h3>
+                    <h3>{post.author.name}</h3>
+
                     <img className="post-image"
                         src={post.image}
                         alt={post.imageDescription}
                         title={post.imageDescription} />
+
                     <p>{post.text}</p>
+
                     <button className="button" onClick={handleBeforePostLikeClick}>{(liked ? '❤️' : '🩶') + ' ' + post.likes.length + ' likes'}</button>
+
+                    {post.author.id === sessionUserId ? <button className="button" onClick={handleBeforePostDelete} >Delete</button> : null}
                 </article>
             })}
         </div> : null}

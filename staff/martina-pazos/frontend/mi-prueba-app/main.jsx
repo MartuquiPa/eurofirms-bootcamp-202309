@@ -1,5 +1,5 @@
 //en javascrip 6 en const no se puede cambiar el valor , a let si
-let loggeInEmail = null
+let sessionUserId = null
 
 console.log("root")
 
