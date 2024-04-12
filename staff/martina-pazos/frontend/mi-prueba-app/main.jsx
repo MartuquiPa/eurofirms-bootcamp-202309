@@ -1,5 +1,5 @@
-//en javascrip 6 en const no se puede cambiar el valor , a let si
 let sessionUserId = null
+//let sessionUserId = db.users[0].id
 
 console.log("root")
 

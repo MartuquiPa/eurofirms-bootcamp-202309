@@ -10,5 +10,6 @@ function authenticateUser(email, password) {
 
     if (user.password !== password)
         throw new Error("Wrong credentials")
+
     return user.id
 }

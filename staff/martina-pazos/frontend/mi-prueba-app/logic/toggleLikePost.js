@@ -19,7 +19,7 @@ function toggleLikePost(userId, postId) {
     if (index < 0)
         post.likes.push(userId)
     else
-        post.likes.splice(userIdIndex, 1)
+        post.likes.splice(index, 1)
 
     db.updatePost(post)
 }

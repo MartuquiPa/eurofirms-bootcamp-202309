@@ -1,5 +1,5 @@
 function Home(props) {
-    console.log("Home")
+    console.log('Home')
 
     const viewState = React.useState(null)
     const view = viewState[0]
@@ -15,7 +15,6 @@ function Home(props) {
         const user = retrieveUser(sessionUserId)
 
         name = user.name
-
     } catch (error) {
         alert(error.message)
     }
@@ -35,7 +34,7 @@ function Home(props) {
     }
 
     function handleNewPostClick() {
-        setView("new-post")
+        setView('new-post')
     }
 
     function handleNewPostCancelClick() {
@@ -45,9 +44,9 @@ function Home(props) {
     function handleNewPostSubmit(event) {
         event.preventDefault()
 
-        const imageInput = event.target.querySelector("#image-input")
-        const imageDescriptionInput = event.target.querySelector("#image-description-input")
-        const textInput = event.target.querySelector("#text-input")
+        const imageInput = event.target.querySelector('#image-input')
+        const imageDescriptionInput = event.target.querySelector('#image-description-input')
+        const textInput = event.target.querySelector('#text-input')
 
         const image = imageInput.value
         const imageDescription = imageDescriptionInput.value
@@ -57,7 +56,6 @@ function Home(props) {
             createNewPost(sessionUserId, image, imageDescription, text)
 
             setView(null)
-
         } catch (error) {
             alert(error.message)
         }
@@ -67,6 +65,14 @@ function Home(props) {
         try {
             toggleLikePost(sessionUserId, postId)
 
+            if (view === "saved") {
+                const saved = retrieveSavedPosts(sessionUserId)
+
+                setSaved(saved)
+
+                return
+            }
+
             setTimestamp(Date.now())
         } catch (error) {
             alert(error.message)
@@ -75,30 +81,68 @@ function Home(props) {
 
     function handlePostDeleteClick(postId) {
         try {
-            deletePost(sessionUserId, userId)
+            deletePost(sessionUserId, postId)
+
+            if (view === "saved") {
+                const saved = retrieveSavedPosts(sessionUserId)
+
+                setSaved(saved)
+
+                return
+            }
 
             setTimestamp(Date.now())
         } catch (error) {
             alert(error.message)
         }
-
     }
 
-    function handleBeforePostDelete() {
-        handlePostDeleteClick(post.id) {
+    function handlePostSaveClick(postId) {
+        try {
+            toggleSavePost(sessionUserId, postId)
 
+            if (view === "saved") {
+                const saved = retrieveSavedPosts(sessionUserId)
+
+                setSaved(saved)
+
+                return
+            }
+
+            setTimestamp(Date.now())
+        } catch (error) {
+            alert(error.message)
         }
+    }
+
+    function handleSavedClick(event) {
+        event.preventDefault()
+        try {
+            const saved = retrieveSavedPosts(sessionUserId)
+
+            setSaved(saved)
+            setView("saved")
+        } catch (error) {
+            alert(error.message)
+        }
+    }
+
+    function handleHomeClick(event) {
+        event.preventDefault()
+
+        setView(null)
     }
 
     return <div>
         <header className="header" aria-label="Header">
-            <h1>Home</h1>
+            <h1><a href="" onClick={handleHomeClick}>Home</a></h1>
             <span aria-label="User name">{name}</span>
             <button title="New post" aria-label="New post" className="button" onClick={handleNewPostClick}>+</button>
+            <a href="" onClick={handleSavedClick}>Saved</a>
             <button className="button" onClick={handleLogoutClick}>Logout</button>
         </header>
 
-        {view === "new-post" ? <div className="view">
+        {view === 'new-post' ? <div className="view">
             <h2>New post</h2>
 
             <form className="form" onSubmit={handleNewPostSubmit}>
@@ -112,17 +156,25 @@ function Home(props) {
                 <input type="text" id="text-input" className="input" required />
 
                 <button type="submit" className="button">Post</button>
-                <button onClick={handleNewPostCancelClick} className="button">Cancel</button>
+                <button className="button" onClick={handleNewPostCancelClick}>Cancel</button>
             </form>
         </div> : null}
 
         {posts !== null ? <div aria-label="Posts list" className="view">
             {posts.toReversed().map(function (post) {
-                const liked = post.likes.includes(loggeInEmail)
-
                 function handleBeforePostLikeClick() {
                     handlePostLikeClick(post.id)
+                }
 
+                function handleBeforePostDeleteClick() {
+                    const confirmed = confirm('Delete post?')
+
+                    if (confirmed)
+                        handlePostDeleteClick(post.id)
+                }
+
+                function handleBeforePostSaveClick() {
+                    handlePostSaveClick(post.id)
                 }
 
                 return <article key={post.id} className="post">
@@ -135,9 +187,11 @@ function Home(props) {
 
                     <p>{post.text}</p>
 
-                    <button className="button" onClick={handleBeforePostLikeClick}>{(liked ? '❤️' : '🩶') + ' ' + post.likes.length + ' likes'}</button>
+                    <button className="button" onClick={handleBeforePostLikeClick}>{(post.liked ? '❤️' : '🩶') + ' ' + post.likes.length + ' likes'}</button>
 
-                    {post.author.id === sessionUserId ? <button className="button" onClick={handleBeforePostDelete} >Delete</button> : null}
+                    <button className="button" onClick={handleBeforePostSaveClick}>{(post.saved ? '⭐️' : '✩')}</button>
+
+                    {post.author.id === sessionUserId ? <button className="button" onClick={handleBeforePostDeleteClick}>Delete</button> : null}
                 </article>
             })}
         </div> : null}

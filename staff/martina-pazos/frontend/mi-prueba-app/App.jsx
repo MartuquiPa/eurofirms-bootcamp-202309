@@ -1,14 +1,14 @@
 function App() {
     console.log("App")
-    //viewState, es el estado de lo que se ve 
+
     const viewState = React.useState('login')
-    //siempre que se use viewState se esta usando una array. Este es el estado actual.
+    //const viewxState = React.useState("home")
     const view = viewState[0]
-    // en la posicion 1 tenemos una funtcion (setView) para cambiar ese estado
+
     const setView = viewState[1]
 
 
-    function handleRegisteShow() {
+    function handleRegisterShow() {
         setView("register")
     }
 
@@ -23,7 +23,7 @@ function App() {
     return <>
         <Logo />
 
-        {view === "login" ? <Login onSuccess={handleHomeShow} onRegisterClick={handleRegisteShow} /> : null}
+        {view === "login" ? <Login onSuccess={handleHomeShow} onRegisterClick={handleRegisterShow} /> : null}
 
         {view === "register" ? <Register onSuccess={handleLoginShow} onLoginClick={handleLoginShow} /> : null}
 
