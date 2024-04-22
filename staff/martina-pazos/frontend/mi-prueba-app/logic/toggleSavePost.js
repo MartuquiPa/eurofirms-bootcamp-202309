@@ -19,5 +19,5 @@ function toggleSavePost(userId, postId) {
     else
         user.saved.splice(index, 1)
 
-    db.updatePost(user)
+    db.updateUser(user)
 }

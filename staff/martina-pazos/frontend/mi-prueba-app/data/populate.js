@@ -4,7 +4,7 @@ db.users[0] = new User(generateId(), "Pepito Grillo", "pepito@grillo.com", "1231
 
 db.users[1] = new User(generateId(), "Campa Nilla", "campa@nilla.com", "123123123", [])
 
-db.users[2] = new User(generateId(), "Mafalda Niña", "mafalda@nina.com", "123123123")
+db.users[2] = new User(generateId(), "Mafalda Niña", "mafalda@nina.com", "123123123", [])
 
 //populate some posts
 db.posts[0] = new Post(generateId(), db.users[0].id, "https://imgs.search.brave.com/KYetCiw1rgr1fq3bX8kvtM1NJmcbuTbh10z4FG9KumA/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9hc3Nl/dHMuc3RpY2twbmcu/Y29tL2ltYWdlcy81/ODdiNTczNzQ0MDYw/OTA5YWE2MDNhYTgu/cG5n", "Pepito Grillo volando agarrado  a un paraguas", "Pepito Grillo en acción", [])

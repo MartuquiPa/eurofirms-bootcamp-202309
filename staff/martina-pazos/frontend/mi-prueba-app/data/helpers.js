@@ -6,9 +6,9 @@ function generateId() {
 //cloning 
 
 function cloneUser(user) {
-    return new user(user.id, user.name, user.email, user.password, [...user.saved])
+    return new User(user.id, user.name, user.email, user.password, [...user.saved])
 }
 
 function clonePost(post) {
-    return new post(post.id, post.author, post.image, post.imageDescription, post.text, [...post.likes])
+    return new Post(post.id, post.author, post.image, post.imageDescription, post.text, [...post.likes])
 }
