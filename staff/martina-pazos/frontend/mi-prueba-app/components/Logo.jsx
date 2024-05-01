@@ -1,5 +1,8 @@
 function Logo() {
     console.log("Logo")
+
+    const logoPicture = React.useRef()
+
     return <svg version="1.1"
         width="30" height="30"
         xmlns="http://www.w3.org/2000/svg">
