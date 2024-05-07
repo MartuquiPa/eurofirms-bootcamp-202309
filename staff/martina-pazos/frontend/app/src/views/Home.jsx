@@ -1,22 +1,23 @@
-import React from "react"
+import [useState] from "react"
+import retrieveUser from "../logic/retrieveUser"
+import retrievePosts from "../logic/retrievePosts"
 
 function Home(props) {
     console.log('Home')
 
-    const viewState = React.useState(null)
-    const view = viewState[0]
-    const setView = viewState[1]
+    const [view, setView] = useState(null)
 
-    const timestampState = React.useState(null)
-    //const timestamp = timestampState[0]
-    const setTimestamp = timestampState[1]
+    const [timestampState, setTimestamp] = useState(null)
+
+    const [saved, setSaved] = useState(null)
+
 
     let name = null
 
     try {
-        // const user = retrieveUser(sessionUserId)
+        const user = retrieveUser(window.sessionUserId)
 
-        // name = user.name
+        name = user.name
     } catch (error) {
         alert(error.message)
     }
@@ -24,7 +25,7 @@ function Home(props) {
     let posts = null
 
     try {
-        // posts = retrievePosts(sessionUserId)
+        const posts = retrievePosts(window.sessionUserId)
     } catch (error) {
         alert(error.message)
     }

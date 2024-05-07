@@ -1,3 +1,6 @@
+import { registerUser } from "../logic/registerUser"
+
+
 function Register(props) {
     console.log("Register")
     function handleRegisterSubmit(event) {
@@ -12,7 +15,7 @@ function Register(props) {
 
 
         try {
-            // registerUser(name, email, password)
+            registerUser(name, email, password)
 
             props.onSuccess()
         } catch (error) {
